@@ -34,6 +34,9 @@
 // IRQ used for detecting optical signals
 #include "hardware/irq.h"
 
+//PIO for LCD SPI interface
+#include "hardware/pio.h"
+
 /* May need ADC to convert optical signals from analog to digital,
 but should not be necessary based on IR receiver schematic */
 #include "hardware/adc.h"
@@ -62,6 +65,10 @@ but should not be necessary based on IR receiver schematic */
 
 
 // LCD Screen Variables
+/**
+ * We should use landscape mode with the VGA which requires setting rotation mode to 1
+ * 
+ */
 
 
 /* FUNCTIONS */

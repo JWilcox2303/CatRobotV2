@@ -44,8 +44,12 @@ pico_set_program_version(Cat_Robot_V2 "0.1")
 pico_enable_stdio_uart(Cat_Robot_V2 1)
 pico_enable_stdio_usb(Cat_Robot_V2 1)
 
+pico_generate_pio_header(Cat_Robot_V2 ${CMAKE_CURRENT_LIST_DIR}/SPIPIO.pio)
+
+target_sources(Cat_Robot_V2 PRIVATE Cat_Robot_V2.c TFTMaster.c glcdfont.c)
+
 # Add the standard library to the build
-target_link_libraries(Cat_Robot_V2 pico_stdlib pico_bootsel_via_double_reset pico_multicore hardware_pwm hardware_dma hardware_irq hardware_adc hardware_i2c)
+target_link_libraries(Cat_Robot_V2 pico_stdlib pico_bootsel_via_double_reset pico_multicore hardware_pwm hardware_dma hardware_irq hardware_adc hardware_i2c hardware_pio)
 
 # Add the standard include files to the build
 target_include_directories(Cat_Robot_V2 PRIVATE
@@ -55,12 +59,10 @@ target_include_directories(Cat_Robot_V2 PRIVATE
 # add_executable(Cat_Robot)
 
 # # must match with pio filename and executable name from above
-# pico_generate_pio_header(Cat_Robot ${CMAKE_CURRENT_LIST_DIR}/hsync.pio)
+
 # pico_generate_pio_header(Cat_Robot ${CMAKE_CURRENT_LIST_DIR}/vsync.pio)
 # pico_generate_pio_header(Cat_Robot ${CMAKE_CURRENT_LIST_DIR}/rgb.pio)
-
 # # must match with executable name and source file names
-# target_sources(Cat_Robot PRIVATE Cat_Robot.c)
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(Cat_Robot_V2)
