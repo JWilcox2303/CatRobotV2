@@ -1,0 +1,1 @@
+This project contains the software for the Cat Robot project for Professor Van Hunter Adams' Microcontrollers Course (ECE 5730) at Cornell University. This project was developed by Jeffrey Wilcox, Lauren Lee, and Charlie Wright.
