@@ -46,10 +46,10 @@ pico_enable_stdio_usb(Cat_Robot_V2 1)
 
 pico_generate_pio_header(Cat_Robot_V2 ${CMAKE_CURRENT_LIST_DIR}/SPIPIO.pio)
 
-target_sources(Cat_Robot_V2 PRIVATE Cat_Robot_V2.c TFTMaster.c glcdfont.c)
+target_sources(Cat_Robot_V2 PRIVATE Cat_Robot_V2.c TFTMaster.c glcdfont.c servo.c)
 
 # Add the standard library to the build
-target_link_libraries(Cat_Robot_V2 pico_stdlib pico_bootsel_via_double_reset pico_multicore hardware_pwm hardware_dma hardware_irq hardware_adc hardware_i2c hardware_pio)
+target_link_libraries(Cat_Robot_V2 pico_stdlib pico_bootsel_via_double_reset pico_multicore hardware_pwm hardware_dma hardware_irq hardware_adc hardware_i2c hardware_pio hardware_clocks)
 
 # Add the standard include files to the build
 target_include_directories(Cat_Robot_V2 PRIVATE

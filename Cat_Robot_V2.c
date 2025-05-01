@@ -25,11 +25,11 @@
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 
-// PWM used for driving the DC motors
+// PWM used for driving the DC and servo motors
 #include "hardware/pwm.h"
-
-// DMA used for generating cat meow sounds
-#include "hardware/dma.h"
+#include "hardware/clocks.h"
+#include "servo.h"
+// #include "servoObject.h"
 
 // IRQ used for detecting optical signals
 #include "hardware/irq.h"
@@ -43,6 +43,7 @@ but should not be necessary based on IR receiver schematic */
 
 // Include Custom Libraries, protothreads
 #include "pt_cornell_rp2040_v1_3.h"
+
 
 /* VARIABLES */
 
@@ -62,7 +63,9 @@ but should not be necessary based on IR receiver schematic */
  */
 
 // Servo Motor Variables
-
+#define servoPin 16
+int currentMillis = 2400;
+bool direction = true;
 
 // LCD Screen Variables
 /**
@@ -72,30 +75,63 @@ but should not be necessary based on IR receiver schematic */
 
 
 /* FUNCTIONS */
+void servoTest(){
+    currentMillis += (direction)?200:-200;
+    if (currentMillis >= 2400){
+        direction = false;
+        currentMillis = 2400;
+    }
+    if (currentMillis <= 400){
+        direction = true;
+        currentMillis = 400;
+    }
+    setMillis(servoPin, currentMillis);
+}
+
 
 /* INTERRUPTS*/
 
 /* PROTOTHREADS */
 
-static PT_THREAD(pt_blink(struct pt *pt)){
+static PT_THREAD(pt_blink_servo(struct pt *pt)){
     PT_BEGIN(pt);
+    setServo(servoPin, currentMillis);
     while(1){
-        printf("Hello, world!\n");
+        // printf("Hello, world!\n");
         gpio_put(25, true);
-        sleep_ms(1000);
+        sleep_ms(15);
         gpio_put(25, false);
-        sleep_ms(1000);
+        sleep_ms(15);
+
+        servoTest();
+        printf("%d", currentMillis);
+
         PT_YIELD(pt);
     }
     PT_END(pt);
 }
 
+// static PT_THREAD(pt_servo(struct pt *pt)){
+//     PT_BEGIN(pt);
+//     while(1){
+
+//         sleep_ms(10);
+
+//         PT_YIELD(pt);
+//     }
+//     PT_END(pt);
+// }
+
 int main()
 {
     stdio_init_all();
+    gpio_init(servoPin);
+    gpio_set_dir(servoPin, true);
     gpio_init(25);
     gpio_set_dir(25, true);
 
-    pt_add_thread(pt_blink);
+    pt_add_thread(pt_blink_servo);
     pt_schedule_start;
+
+    //Servo initializing
 }
